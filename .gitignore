@@ -108,4 +108,6 @@ dist/
 tmp/
 temp/
 
+images/*
+
 # End of https://www.gitignore.io/api/node
