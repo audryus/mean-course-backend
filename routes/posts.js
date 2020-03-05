@@ -4,6 +4,8 @@ const router = express.Router();
 const Post = require("../model/post");
 const multer = require("multer");
 
+const checkAuth = require("../middleware/check-auth")
+
 const MIME_TYPE_MAP = {
   "image/png": "png",
   "image/jpeg": "jpg",
@@ -53,7 +55,10 @@ var setImagePath = (postModel, req) => {
   postModel.imagePath = getUrl(req) + "/images/" + req.file.filename;
 };
 
-router.post("", multer({ storage: storage }).single("image"), (req, res, next) => {
+router.post("", 
+  checkAuth, 
+  multer({ storage: storage }).single("image"), 
+  (req, res, next) => {
     const post = req.body;
     const postModel = getPostModel(req);
     postModel.save().then(savedData => {
@@ -66,7 +71,10 @@ router.post("", multer({ storage: storage }).single("image"), (req, res, next) =
   }
 );
 
-router.patch("/:id", multer({ storage: storage }).single("image"), (req, res, next) => {
+router.patch("/:id", 
+  checkAuth,
+  multer({ storage: storage }).single("image"), 
+  (req, res, next) => {
     const postModel = getPostModel(req);
     Post.updateOne({ _id: req.params.id }, postModel).then(result => {
       res.status(200).json({ message: "ok" });
@@ -110,7 +118,7 @@ router.get("/:id", (req, res, next) => {
   });
 });
 
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id", checkAuth, (req, res, next) => {
   Post.deleteOne({ _id: req.params.id }).then(result => {
     res.status(200).json(result);
   });
