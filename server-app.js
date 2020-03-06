@@ -2,12 +2,12 @@ const path = require("path")
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const postsRoutes = require("./routes/posts");
-const userRoutes = require("./routes/user");
+const postRoutes = require("./routes/post.routes");
+const userRoutes = require("./routes/user.routes");
 const app = express();
 
 mongoose
-  .connect("mongodb://aubay:AwXzSA5dVCq7S6Wq@192.168.56.3/node-angular", {
+  .connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_HOST}/node-angular`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
@@ -35,7 +35,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/post/", postsRoutes);
-app.use("/api/user/", userRoutes);
+app.use("/v1/api/post/", postRoutes);
+app.use("/v1/api/user/", userRoutes);
 
 module.exports = app;
