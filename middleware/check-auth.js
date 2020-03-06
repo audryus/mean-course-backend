@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-var authDenial = res => res.status(401).json({ message: "Auth failed"});
+var authDenial = res => res.status(401).json({ message: "You are not authorized."});
 
 module.exports = (req, res, next) => {
     try {

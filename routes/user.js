@@ -24,12 +24,12 @@ router.post("/sign/up", (req, res, next) => {
             model.save().then(result => {
                 res.status(201).json({ message: "created", users: [result] })
             }).catch(err => {
-                res.status(500).json({error: err})
+                res.status(500).json({message: "User already have account."})
             });
         });
 });
 
-var authDenial = res => res.status(401).json({ message: "Auth failed"});
+var authDenial = res => res.status(401).json({ message: "Invalid authentication credentials"});
 
 router.post("/sign/in", (req, res, next) => {
     let fetchedUser;

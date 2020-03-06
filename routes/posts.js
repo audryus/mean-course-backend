@@ -71,6 +71,10 @@ router.post("",
         message: "Sucess",
         posts: [post]
       });
+    }).catch(error => {
+      res.status(500).json({
+        message: "Failed to create new post."
+      })
     });
   }
 );
@@ -81,11 +85,13 @@ router.patch("/:id",
   (req, res, next) => {
     const postModel = getPostModel(req);
     Post.updateOne({ _id: req.params.id, creator: postModel.creator }, postModel).then(result => {
-      if (result.nModified > 0) {
+      if (result.n > 0) {
         res.status(200).json({ message: "ok" });
       } else {
         res.status(401).json({ message: "Not authorized" });
       }
+    }).catch(err => {
+      res.status(500).json({ message: "Failed to update post" });
     });
   }
 );
@@ -110,6 +116,8 @@ router.get("", (req, res, next) => {
       posts: fetchedDocuments,
       count: count
     });
+  }).catch(err => {
+    res.status(500).json({ message: "Failed to fetch post" });
   });
 });
 
@@ -123,6 +131,8 @@ router.get("/:id", (req, res, next) => {
     } else {
       res.status(404).json({ message: "Post not found." });
     }
+  }).catch(err => {
+    res.status(500).json({ message: "Failed to fetch post" });
   });
 });
 
@@ -133,6 +143,8 @@ router.delete("/:id", checkAuth, (req, res, next) => {
     } else {
       res.status(401).json({ message: "Not authorized" });
     }
+  }).catch(err => {
+    res.status(500).json({ message: "Failed to delete post" });
   });
 });
 
